@@ -25,7 +25,6 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
         this.setSize(WIDTH, HEIGHT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.setBackground(Color.BLACK);
         this.setResizable(false);
         this.addKeyListener(this);
 
@@ -53,6 +52,8 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
     }
 
     public void update() {
+        if(paddle == null) return;
+
         if(this.left || this.right) {
             if(this.left)
                 this.getPaddle().left();
@@ -61,6 +62,7 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
         } else this.getPaddle().idle();
 
         this.getPaddle().update(this);
+        if(this.getBallListSize() == 0) this.gameOver();
         for(int i = 0; i < this.getBallListSize(); i++) {
             if(!this.getBall(i).isVisible())
                 this.removeBallList(i);
@@ -76,8 +78,19 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
         Graphics g = this.getG();
         if(g == null) return;
 
+
         //CLEAR
         g.clearRect(0, 0, WIDTH, HEIGHT);
+
+        this.update();
+
+        g.setColor(Color.GREEN);
+        this.getG().setFont(new Font("Monospaced", Font.PLAIN, 20));
+        this.getG().drawString(
+                "BallListSize " + this.getBallListSize() + ",   BlockListSize " + this.getBlockListSize() + ",       X: " + this.getPaddle().getPos().getX() + " Y: " + this.getPaddle().getPos().getY(),
+                20, 50);
+
+        g.setColor(Color.WHITE);
 
         //PADDLE
         if(this.getPaddle() != null) this.getPaddle().draw(g);
@@ -90,7 +103,13 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
 
 
         graphics.drawImage(img, 0, 0, null);
-        this.update();
+    }
+
+    public void gameOver() {
+        this.getG().setColor(Color.GREEN);
+        this.getG().setFont(new Font("Arial Black", Font.PLAIN, 30));
+        this.getG().drawString("Game Over", BreakoutGame.WIDTH / 2, BreakoutGame.HEIGHT / 2);
+        this.getG().drawImage(img, 0, 0, null);
     }
 
     @Override

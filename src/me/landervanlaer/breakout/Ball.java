@@ -8,7 +8,7 @@ public class Ball implements BreakoutObject {
     private Position pos;
     private Vector vector;
     private Color color = Color.white;
-    private boolean visible;
+    private boolean visible = true;
 
     public Color getColor() {
         return color;
@@ -29,8 +29,6 @@ public class Ball implements BreakoutObject {
         } else {
             setVector(new Vector(0D, 0D));
         }
-        System.out.println(this.getVector().getSpeedX());
-        System.out.println(this.getVector().getSpeedY());
     }
 
     public void update(BreakoutGame breakoutGame) {
@@ -43,11 +41,11 @@ public class Ball implements BreakoutObject {
             this.getVector().invertSpeedX();
         }
         if(this.getPos().getY() < 0) {
+            this.getPos().setY(0);
+            this.getVector().invertSpeedY();
+        } else if(this.getPos().getY() + Ball.WIDTH > BreakoutGame.HEIGHT) {
             //DELETE
             this.unvisible();
-        } else if(this.getPos().getY() + Ball.WIDTH > BreakoutGame.HEIGHT) {
-            this.getPos().setY(BreakoutGame.HEIGHT - Ball.WIDTH);
-            this.getVector().invertSpeedY();
         }
 
 

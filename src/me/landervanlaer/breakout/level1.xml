@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<BlockList>
+    <Block>
+        <Position>
+            <x>100</x>
+            <y>200</y>
+        </Position>
+        <Size>
+            <width>100</width>
+            <height>100</height>
+        </Size>
+    </Block>
+    <Block>
+        <Position>
+            <x>200</x>
+            <y>250</y>
+        </Position>
+        <Size>
+            <width>100</width>
+            <height>100</height>
+        </Size>
+    </Block>
+    <Block>
+        <Position>
+            <x>300</x>
+            <y>300</y>
+        </Position>
+        <Size>
+            <width>100</width>
+            <height>100</height>
+        </Size>
+    </Block>
+    <Block>
+        <Position>
+            <x>400</x>
+            <y>500</y>
+        </Position>
+        <Size>
+            <width>100</width>
+            <height>100</height>
+        </Size>
+    </Block>
+</BlockList>
