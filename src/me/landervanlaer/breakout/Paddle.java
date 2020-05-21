@@ -27,7 +27,7 @@ public class Paddle implements BreakoutObject {
     }
 
     @Override
-    public void update(BreakoutGame breakoutGame) {
+    public void update(Level level) {
         //VALIDATE BORDERS
         if(this.getPos().getX() < 0) {
             this.getPos().setX(0);

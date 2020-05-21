@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 public class BreakoutGame extends JFrame implements Runnable, KeyListener {
     public static final int HEIGHT = 720;
@@ -13,13 +12,11 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
     private Thread thread;
     private Image img;
     private Graphics g;
-    private ArrayList<Ball> ballList;
-    private ArrayList<Block> blockList;
-    private Paddle paddle;
     private boolean left = false;
     private boolean right = false;
+    private Level level;
 
-    public BreakoutGame() {
+    public BreakoutGame(int levelId) {
         super("Breakout");
         this.setBackground(Color.BLACK);
         this.setSize(WIDTH, HEIGHT);
@@ -28,17 +25,12 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
         this.setResizable(false);
         this.addKeyListener(this);
 
+        this.setLevel(new Level(1));
 
         this.setImg(createImage(WIDTH, HEIGHT));
         this.setG(img.getGraphics());
 
-        this.setBallList(new ArrayList<Ball>());
-        this.addBall(
-                (int) Math.round(BreakoutGame.WIDTH / 2D),
-                (int) Math.round(BreakoutGame.HEIGHT / 2D),
-                new Vector((int) (Math.random() * 90D) - 135, Ball.SPEED));
-
-        this.setPaddle(new Paddle((int) (BreakoutGame.WIDTH / 2D), (int) (BreakoutGame.HEIGHT / 10D * 9.5)));
+        this.setLevel(new Level(levelId));
 
         this.paint(this.getGraphics());
         this.update();
@@ -47,29 +39,36 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
         this.getThread().start();
     }
 
-    public static void main(String[] args) {
-        new BreakoutGame();
-    }
 
     public void update() {
-        if(paddle == null) return;
+        if(this.getLevel().getPaddle() == null) return;
 
-        if(this.left || this.right) {
-            if(this.left)
-                this.getPaddle().left();
-            if(this.right)
-                this.getPaddle().right();
-        } else this.getPaddle().idle();
+        if(this.isLeft() || this.isRight()) {
+            if(this.isLeft())
+                this.getLevel().getPaddle().left();
+            if(this.isRight())
+                this.getLevel().getPaddle().right();
+        } else this.getLevel().getPaddle().idle();
 
-        this.getPaddle().update(this);
-        if(this.getBallListSize() == 0) this.gameOver();
-        for(int i = 0; i < this.getBallListSize(); i++) {
-            if(!this.getBall(i).isVisible())
-                this.removeBallList(i);
+
+        this.getLevel().getPaddle().update(this.getLevel());
+
+
+        if(this.getLevel().getBallListSize() == 0) this.gameOver();
+        for(int i = 0; i < this.getLevel().getBallListSize(); i++) {
+            if(!this.getLevel().getBallList().get(i).isVisible())
+                this.getLevel().getBallList().remove(i);
             else
-                this.getBall(i).update(this);
+                this.getLevel().getBallList().get(i).update(this.getLevel());
         }
-        for(int i = 0; i < this.getBlockListSize(); i++) this.getBlock(i).update(this);
+
+        if(this.getLevel().getBlockListSize() == 0) this.gameOver();
+        for(int i = 0; i < this.getLevel().getBlockListSize(); i++) {
+            if(!this.getLevel().getBlockList().get(i).isVisible())
+                this.getLevel().getBlockList().remove(i);
+            else
+                this.getLevel().getBlockList().get(i).update(this.getLevel());
+        }
     }
 
 
@@ -87,19 +86,22 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
         g.setColor(Color.GREEN);
         this.getG().setFont(new Font("Monospaced", Font.PLAIN, 20));
         this.getG().drawString(
-                "BallListSize " + this.getBallListSize() + ",   BlockListSize " + this.getBlockListSize() + ",       X: " + this.getPaddle().getPos().getX() + " Y: " + this.getPaddle().getPos().getY(),
+                "BallListSize " + this.getLevel().getBallListSize() +
+                        ",  BlockListSize " + this.getLevel().getBlockListSize() +
+                        ",  X: " + this.getLevel().getPaddle().getPos().getX() +
+                        "   Y: " + this.getLevel().getPaddle().getPos().getY(),
                 20, 50);
 
         g.setColor(Color.WHITE);
 
         //PADDLE
-        if(this.getPaddle() != null) this.getPaddle().draw(g);
+        if(this.getLevel().getPaddle() != null) this.getLevel().getPaddle().draw(g);
 
         //BALLS
-        for(int i = 0; i < this.getBallListSize(); i++) this.getBall(i).draw(g);
+        for(int i = 0; i < this.getLevel().getBallListSize(); i++) this.getLevel().getBallList().get(i).draw(g);
 
         //BLOCKS
-        for(int i = 0; i < this.getBlockListSize(); i++) this.getBlock(i).draw(g);
+        for(int i = 0; i < this.getLevel().getBlockListSize(); i++) this.getLevel().getBlockList().get(i).draw(g);
 
 
         graphics.drawImage(img, 0, 0, null);
@@ -155,6 +157,14 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
         }
     }
 
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
     public boolean isLeft() {
         return left;
     }
@@ -169,10 +179,6 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
 
     public void setRight(boolean right) {
         this.right = right;
-    }
-
-    private void addBall(int x, int y, Vector vec) {
-        this.ballList.add(new Ball(x, y, vec));
     }
 
     public Thread getThread() {
@@ -198,50 +204,4 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
     public void setG(Graphics g) {
         this.g = g;
     }
-
-
-    public Ball getBall(int i) {
-        return this.ballList.get(i);
-    }
-
-    public ArrayList<Ball> getBallList() {
-        return ballList;
-    }
-
-    public void setBallList(ArrayList<Ball> ballList) {
-        this.ballList = ballList;
-    }
-
-    public int getBallListSize() {
-        return this.ballList != null ? this.ballList.size() : 0;
-    }
-
-    public Block getBlock(int i) {
-        return this.blockList.get(i);
-    }
-
-    public int getBlockListSize() {
-        return this.blockList != null ? this.blockList.size() : 0;
-    }
-
-    public ArrayList<Block> getBlockList() {
-        return blockList;
-    }
-
-    public void setBlockList(ArrayList<Block> blockList) {
-        this.blockList = blockList;
-    }
-
-    public Paddle getPaddle() {
-        return paddle;
-    }
-
-    public void setPaddle(Paddle paddle) {
-        this.paddle = paddle;
-    }
-
-    public void removeBallList(int i) {
-        this.ballList.remove(i);
-    }
-
 }

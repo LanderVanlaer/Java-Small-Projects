@@ -18,20 +18,18 @@ public class Ball implements BreakoutObject {
         this.color = color;
     }
 
+
     public Ball(int x, int y) {
-        this(x, y, new Vector(0D, 0D));
+        this(x, y, null);
     }
 
-    public Ball(int x, int y, Vector vector) {
+    public Ball(int x, int y, Integer degrees) {
         setPos(x, y);
-        if(vector != null) {
-            setVector(vector);
-        } else {
-            setVector(new Vector(0D, 0D));
-        }
+        if(degrees == null) degrees = -90;
+        setVector(new Vector(degrees, Ball.SPEED));
     }
 
-    public void update(BreakoutGame breakoutGame) {
+    public void update(Level level) {
         //VALIDATE BORDERS
         if(this.getPos().getX() < 0) {
             this.getPos().setX(0);
@@ -49,19 +47,56 @@ public class Ball implements BreakoutObject {
         }
 
 
-        //COLLISIONS
-        if(this.pos.getX() + this.WIDTH >= breakoutGame.getPaddle().getPos().getX()
-                && this.pos.getX() <= breakoutGame.getPaddle().getPos().getX() + breakoutGame.getPaddle().getWidth()
-                && (this.pos.getY() + this.WIDTH >= breakoutGame.getPaddle().getPos().getY()
-                && this.pos.getY() <= breakoutGame.getPaddle().getPos().getY() + breakoutGame.getPaddle().getHeight())) {
+        //COLLISIONS PADDLE
+        if(this.pos.getX() + Ball.WIDTH >= level.getPaddle().getPos().getX()
+                && this.pos.getX() <= level.getPaddle().getPos().getX() + level.getPaddle().getWidth()
+                && this.pos.getY() + Ball.WIDTH >= level.getPaddle().getPos().getY()
+                && this.pos.getY() <= level.getPaddle().getPos().getY() + level.getPaddle().getHeight()) {
 
-            if(this.pos.getY() + this.WIDTH >= breakoutGame.getPaddle().getPos().getY()
-                    && this.pos.getY() <= breakoutGame.getPaddle().getPos().getY() + breakoutGame.getPaddle().getHeight()) {
-                this.getVector().invertSpeedY();
-            } else
+            final int lengthDifferencePaddleLeft = this.pos.getX() + Ball.WIDTH - level.getPaddle().getPos().getX();
+            final int lengthDifferencePaddleRight = level.getPaddle().getPos().getX() + level.getPaddle().getWidth() - this.pos.getX();
+            final int lengthDifferencePaddleTop = this.pos.getY() + Ball.WIDTH - level.getPaddle().getPos().getY();
+            final int lengthDifferencePaddleBottom = level.getPaddle().getPos().getY() + level.getPaddle().getHeight() - this.pos.getY();
+
+            final int min = Math.min(Math.min(lengthDifferencePaddleTop, lengthDifferencePaddleBottom), Math.min(lengthDifferencePaddleLeft, lengthDifferencePaddleRight));
+            if(min == lengthDifferencePaddleLeft || min == lengthDifferencePaddleRight) {
                 this.getVector().invertSpeedX();
+            } else {
+                this.getVector().invertSpeedY();
+            }
         }
 
+        //COLLISIONS BLOCKS
+        for(Block block : level.getBlockList()) {
+            if(this.pos.getX() + Ball.WIDTH >= block.getPos().getX()
+                    && this.pos.getX() <= block.getPos().getX() + block.getWidth()
+                    && this.pos.getY() + Ball.WIDTH >= block.getPos().getY()
+                    && this.pos.getY() <= block.getPos().getY() + block.getHeight()) {
+
+                //TOUCHING BLOCK
+                block.hit();
+
+                final int lengthDifferenceBlockLeft = this.pos.getX() + Ball.WIDTH - block.getPos().getX();
+                final int lengthDifferenceBlockRight = block.getPos().getX() + block.getWidth() - this.pos.getX();
+                final int lengthDifferenceBlockTop = this.pos.getY() + Ball.WIDTH - block.getPos().getY();
+                final int lengthDifferenceBlockBottom = block.getPos().getY() + block.getHeight() - this.pos.getY();
+
+                final int min = Math.min(Math.min(lengthDifferenceBlockTop, lengthDifferenceBlockBottom), Math.min(lengthDifferenceBlockLeft, lengthDifferenceBlockRight));
+                if(min == lengthDifferenceBlockLeft) {
+                    this.pos.setX(block.getPos().getX() - Ball.WIDTH);
+                    this.getVector().invertSpeedX();
+                } else if(min == lengthDifferenceBlockRight) {
+                    this.pos.setX(block.getPos().getX() + block.getWidth());
+                    this.getVector().invertSpeedX();
+                } else if(min == lengthDifferenceBlockTop) {
+                    this.pos.setY(block.getPos().getY() - Ball.WIDTH);
+                    this.getVector().invertSpeedY();
+                } else {
+                    this.pos.setY(block.getPos().getY() + block.getHeight());
+                    this.getVector().invertSpeedY();
+                }
+            }
+        }
 
         this.getPos().setX((int) Math.round(this.getPos().getX() + this.getVector().getSpeedX()));
         this.getPos().setY((int) Math.round(this.getPos().getY() + this.getVector().getSpeedY()));
