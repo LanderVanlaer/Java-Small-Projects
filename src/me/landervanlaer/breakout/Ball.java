@@ -59,12 +59,21 @@ public class Ball implements BreakoutObject {
             final int lengthDifferencePaddleBottom = level.getPaddle().getPos().getY() + level.getPaddle().getHeight() - this.pos.getY();
 
             final int min = Math.min(Math.min(lengthDifferencePaddleTop, lengthDifferencePaddleBottom), Math.min(lengthDifferencePaddleLeft, lengthDifferencePaddleRight));
-            if(min == lengthDifferencePaddleLeft || min == lengthDifferencePaddleRight) {
+            if(min == lengthDifferencePaddleLeft) {
+                this.pos.setX(level.getPaddle().getPos().getX() - Ball.WIDTH);
                 this.getVector().invertSpeedX();
+            } else if(min == lengthDifferencePaddleRight) {
+                this.pos.setX(level.getPaddle().getPos().getX() + level.getPaddle().getWidth());
+                this.getVector().invertSpeedX();
+            } else if(min == lengthDifferencePaddleTop) {
+                this.pos.setY(level.getPaddle().getPos().getY() - Ball.WIDTH);
+                this.getVector().setSpeedX(level.getPaddle().getVector().getSpeedX());
             } else {
+                this.pos.setY(level.getPaddle().getPos().getY() + level.getPaddle().getHeight());
                 this.getVector().invertSpeedY();
             }
         }
+
 
         //COLLISIONS BLOCKS
         for(Block block : level.getBlockList()) {

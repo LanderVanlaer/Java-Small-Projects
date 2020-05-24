@@ -53,22 +53,28 @@ public class BreakoutGame extends JFrame implements Runnable, KeyListener {
 
         this.getLevel().getPaddle().update(this.getLevel());
 
+        //UPDATE BALLS
+        for(int i = 0; i < this.getLevel().getBallListSize(); i++) {
+            this.getLevel().getBallList().get(i).update(this.getLevel());
+        }
 
-        if(this.getLevel().getBallListSize() == 0) this.gameOver();
         for(int i = 0; i < this.getLevel().getBallListSize(); i++) {
             if(!this.getLevel().getBallList().get(i).isVisible())
                 this.getLevel().getBallList().remove(i);
-            else
-                this.getLevel().getBallList().get(i).update(this.getLevel());
+        }
+        if(this.getLevel().getBallListSize() == 0) this.gameOver();
+
+
+        //UPDATE BLOCK
+        for(int i = 0; i < this.getLevel().getBlockListSize(); i++) {
+            this.getLevel().getBlockList().get(i).update(this.getLevel());
         }
 
-        if(this.getLevel().getBlockListSize() == 0) this.gameOver();
         for(int i = 0; i < this.getLevel().getBlockListSize(); i++) {
             if(!this.getLevel().getBlockList().get(i).isVisible())
                 this.getLevel().getBlockList().remove(i);
-            else
-                this.getLevel().getBlockList().get(i).update(this.getLevel());
         }
+        if(this.getLevel().getBlockListSize() == 0) this.gameOver();
     }
 
 

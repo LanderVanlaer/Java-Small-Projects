@@ -42,7 +42,7 @@ public class Block implements BreakoutObject {
 
     @Override
     public void update(Level level) {
-        if(this.getHealth() <= 0) {
+        if(this.getHealth() <= 0D) {
             this.unvisible();
         } else
             this.setColor(new Color(
