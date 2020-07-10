@@ -43,11 +43,11 @@ public class Vector {
     }
 
     public void invertSpeedX() {
-        this.setSpeedX(-speedX);
+        this.setSpeedX(-this.getSpeedX());
     }
 
     public void invertSpeedY() {
-        this.setSpeedY(-speedY);
+        this.setSpeedY(-this.getSpeedY());
     }
 
     public double getSpeedX() {

@@ -2,14 +2,13 @@ package me.landervanlaer.breakout;
 
 import java.awt.*;
 
-public class Paddle implements BreakoutObject {
+public class Paddle extends BreakoutObject {
     private Position pos;
     private Vector vector;
     private int width = 100;
     private int height = 15;
     public static final double SPEED = 2.5;
     public static final double MAX_SPEED = 12.5;
-    private boolean visible;
 
 
     public Paddle(int x, int y) {
@@ -58,6 +57,15 @@ public class Paddle implements BreakoutObject {
         this.getVector().setSpeedX(this.getVector().getSpeedX() + Paddle.SPEED);
     }
 
+    public int getXRightBorder() {
+        return this.getPos().getX() + this.getWidth();
+    }
+
+    public int getYBottomBorder() {
+        return this.getPos().getY() + this.getHeight();
+    }
+
+
     public Position getPos() {
         return pos;
     }
@@ -74,7 +82,6 @@ public class Paddle implements BreakoutObject {
         this.vector = vector;
     }
 
-
     public int getWidth() {
         return width;
     }
@@ -89,21 +96,5 @@ public class Paddle implements BreakoutObject {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public void unvisible() {
-        this.setVisible(false);
-    }
-
-    public void visible() {
-        this.setVisible(true);
     }
 }

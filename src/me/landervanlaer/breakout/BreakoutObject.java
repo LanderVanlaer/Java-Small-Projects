@@ -2,16 +2,17 @@ package me.landervanlaer.breakout;
 
 import java.awt.*;
 
-interface BreakoutObject {
-    void draw(Graphics g);
+abstract class BreakoutObject{
+    private boolean visible = true;
+    abstract void draw(Graphics g);
 
-    void update(Level level);
+    abstract void update(Level level);
 
-    boolean isVisible();
+    public boolean isVisible(){
+        return this.visible;
+    };
 
-    void setVisible(boolean visible);
-
-    void unvisible();
-
-    void visible();
+    void setVisible(boolean visible){
+        this.visible = visible;
+    };
 }

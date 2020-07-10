@@ -2,8 +2,7 @@ package me.landervanlaer.breakout;
 
 import java.awt.*;
 
-public class Block implements BreakoutObject {
-    private boolean visible = true;
+public class Block extends BreakoutObject {
     private double health;
     public static final double hitHealthDifference = .2;
     private Position pos;
@@ -43,7 +42,7 @@ public class Block implements BreakoutObject {
     @Override
     public void update(Level level) {
         if(this.getHealth() <= 0D) {
-            this.unvisible();
+            this.setVisible(false);
         } else
             this.setColor(new Color(
                     this.getColor().getRed(),
@@ -68,14 +67,6 @@ public class Block implements BreakoutObject {
         this.height = height;
     }
 
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
     public double getHealth() {
         return health;
     }
@@ -86,14 +77,6 @@ public class Block implements BreakoutObject {
 
     public void hit() {
         this.setHealth(this.getHealth() - Block.hitHealthDifference);
-    }
-
-    public void unvisible() {
-        this.setVisible(false);
-    }
-
-    public void visible() {
-        this.setVisible(true);
     }
 
     public Color getColor() {

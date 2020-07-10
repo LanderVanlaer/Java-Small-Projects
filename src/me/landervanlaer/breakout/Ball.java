@@ -2,13 +2,12 @@ package me.landervanlaer.breakout;
 
 import java.awt.*;
 
-public class Ball implements BreakoutObject {
+public class Ball extends BreakoutObject {
     public static final int WIDTH = 10;
     public static final int SPEED = 8;
     private Position pos;
     private Vector vector;
     private Color color = Color.white;
-    private boolean visible = true;
 
     public Color getColor() {
         return color;
@@ -43,33 +42,34 @@ public class Ball implements BreakoutObject {
             this.getVector().invertSpeedY();
         } else if(this.getPos().getY() + Ball.WIDTH > BreakoutGame.HEIGHT) {
             //DELETE
-            this.unvisible();
+            this.setVisible(false);
         }
 
 
         //COLLISIONS PADDLE
-        if(this.pos.getX() + Ball.WIDTH >= level.getPaddle().getPos().getX()
-                && this.pos.getX() <= level.getPaddle().getPos().getX() + level.getPaddle().getWidth()
-                && this.pos.getY() + Ball.WIDTH >= level.getPaddle().getPos().getY()
-                && this.pos.getY() <= level.getPaddle().getPos().getY() + level.getPaddle().getHeight()) {
+        if(this.getPos().getX() + Ball.WIDTH >= level.getPaddle().getPos().getX()
+                && this.getPos().getX() <= level.getPaddle().getXRightBorder()
+                && this.getPos().getY() + Ball.WIDTH >= level.getPaddle().getPos().getY()
+                && this.getPos().getY() <= level.getPaddle().getYBottomBorder()) {
 
-            final int lengthDifferencePaddleLeft = this.pos.getX() + Ball.WIDTH - level.getPaddle().getPos().getX();
-            final int lengthDifferencePaddleRight = level.getPaddle().getPos().getX() + level.getPaddle().getWidth() - this.pos.getX();
-            final int lengthDifferencePaddleTop = this.pos.getY() + Ball.WIDTH - level.getPaddle().getPos().getY();
-            final int lengthDifferencePaddleBottom = level.getPaddle().getPos().getY() + level.getPaddle().getHeight() - this.pos.getY();
+            final int lengthDifferencePaddleLeft = Math.abs(this.getPos().getX() + Ball.WIDTH - level.getPaddle().getPos().getX());
+            final int lengthDifferencePaddleRight = Math.abs(level.getPaddle().getXRightBorder() - this.getPos().getX());
+            final int lengthDifferencePaddleTop = Math.abs(this.getPos().getY() + Ball.WIDTH - level.getPaddle().getPos().getY());
+            final int lengthDifferencePaddleBottom = Math.abs(level.getPaddle().getYBottomBorder() - this.getPos().getY());
 
             final int min = Math.min(Math.min(lengthDifferencePaddleTop, lengthDifferencePaddleBottom), Math.min(lengthDifferencePaddleLeft, lengthDifferencePaddleRight));
+            final int EXTRA_DIFFERENCE = 5;
             if(min == lengthDifferencePaddleLeft) {
-                this.pos.setX(level.getPaddle().getPos().getX() - Ball.WIDTH);
+                this.getPos().setX(level.getPaddle().getPos().getX() - Ball.WIDTH - EXTRA_DIFFERENCE);
                 this.getVector().invertSpeedX();
             } else if(min == lengthDifferencePaddleRight) {
-                this.pos.setX(level.getPaddle().getPos().getX() + level.getPaddle().getWidth());
+                this.getPos().setX(level.getPaddle().getXRightBorder() + EXTRA_DIFFERENCE);
                 this.getVector().invertSpeedX();
             } else if(min == lengthDifferencePaddleTop) {
-                this.pos.setY(level.getPaddle().getPos().getY() - Ball.WIDTH);
-                this.getVector().setSpeedX(level.getPaddle().getVector().getSpeedX());
+                this.getPos().setY(level.getPaddle().getPos().getY() - Ball.WIDTH - EXTRA_DIFFERENCE);
+                this.getVector().invertSpeedY();
             } else {
-                this.pos.setY(level.getPaddle().getPos().getY() + level.getPaddle().getHeight());
+                this.getPos().setY(level.getPaddle().getYBottomBorder() + EXTRA_DIFFERENCE);
                 this.getVector().invertSpeedY();
             }
         }
@@ -115,22 +115,6 @@ public class Ball implements BreakoutObject {
     public void draw(Graphics g) {
         g.setColor(this.getColor());
         g.fillOval(getPos().getX(), getPos().getY(), Ball.WIDTH, Ball.WIDTH);
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public void unvisible() {
-        this.setVisible(false);
-    }
-
-    public void visible() {
-        this.setVisible(true);
     }
 
     public Position getPos() {
