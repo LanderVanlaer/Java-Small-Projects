@@ -4,6 +4,10 @@ public class Vector {
     private double speedX;
     private double speedY;
 
+    public Vector(Vector v) {
+        this(v.getSpeedX(), v.getSpeedY());
+    }
+
     public Vector() {
         this(0, 0);
     }
