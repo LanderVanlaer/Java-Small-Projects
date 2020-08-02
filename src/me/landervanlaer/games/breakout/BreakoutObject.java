@@ -1,18 +1,23 @@
-package me.landervanlaer.breakout;
+package me.landervanlaer.games.breakout;
 
 import java.awt.*;
 
-abstract class BreakoutObject{
+abstract class BreakoutObject {
     private boolean visible = true;
+
     abstract void draw(Graphics g);
 
     abstract void update(Level level);
 
-    public boolean isVisible(){
+    public boolean isVisible() {
         return this.visible;
-    };
+    }
 
-    void setVisible(boolean visible){
+    ;
+
+    void setVisible(boolean visible) {
         this.visible = visible;
-    };
+    }
+
+    ;
 }

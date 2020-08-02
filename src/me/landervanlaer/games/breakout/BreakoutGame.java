@@ -1,4 +1,4 @@
-package me.landervanlaer.breakout;
+package me.landervanlaer.games.breakout;
 
 import javax.swing.*;
 import java.awt.*;

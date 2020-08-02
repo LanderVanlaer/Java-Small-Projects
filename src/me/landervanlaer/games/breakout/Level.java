@@ -1,4 +1,4 @@
-package me.landervanlaer.breakout;
+package me.landervanlaer.games.breakout;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

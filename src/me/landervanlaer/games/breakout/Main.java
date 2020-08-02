@@ -1,4 +1,4 @@
-package me.landervanlaer.breakout;
+package me.landervanlaer.games.breakout;
 
 public class Main {
     public static void main(String[] args) {
