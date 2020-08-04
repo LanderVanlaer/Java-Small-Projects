@@ -17,6 +17,11 @@ public class Coordinates {
         return this.getX() == coordinates.getX() && this.getY() == coordinates.getY();
     }
 
+    public void apply(Vector v) {
+        setX(getX() + v.getSpeedX());
+        setY(getY() + v.getSpeedY());
+    }
+
     public double getX() {
         return x;
     }
