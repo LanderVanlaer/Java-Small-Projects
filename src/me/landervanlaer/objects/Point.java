@@ -1,8 +1,8 @@
 package me.landervanlaer.objects;
 
-import me.landervanlaer.math.Coordinates;
+import me.landervanlaer.math.Coordinate;
 
-public class Point extends Coordinates {
+public class Point extends Coordinate {
 
     public Point(double x, double y) {
         super(x, y);

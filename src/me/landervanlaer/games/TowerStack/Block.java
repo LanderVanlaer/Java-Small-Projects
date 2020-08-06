@@ -2,7 +2,7 @@ package me.landervanlaer.games.TowerStack;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import me.landervanlaer.math.Coordinates;
+import me.landervanlaer.math.Coordinate;
 import me.landervanlaer.objects.Drawable;
 import me.landervanlaer.objects.Rectangle;
 
@@ -14,7 +14,7 @@ public class Block implements Drawable {
     private Color strokeColor = Color.BLACK;
 
 
-    public Block(Coordinates c, double w, double h) {
+    public Block(Coordinate c, double w, double h) {
         this(new Rectangle(c, w, h));
     }
 

@@ -1,17 +1,17 @@
 package me.landervanlaer.objects;
 
 import me.landervanlaer.math.Angle;
-import me.landervanlaer.math.Coordinates;
+import me.landervanlaer.math.Coordinate;
 
 public class Circle extends Shape {
     private double radius;
 
 
-    public Circle(Coordinates position, double radius) {
+    public Circle(Coordinate position, double radius) {
         this(position, null, radius);
     }
 
-    public Circle(Coordinates position, Angle rotation, double radius) {
+    public Circle(Coordinate position, Angle rotation, double radius) {
         super(position, rotation);
         this.radius = radius;
     }

@@ -1,15 +1,15 @@
 package me.landervanlaer.objects;
 
 import me.landervanlaer.math.Angle;
-import me.landervanlaer.math.Coordinates;
+import me.landervanlaer.math.Coordinate;
 
 public class Semicircle extends Circle {
 
-    public Semicircle(Coordinates position, Angle rotation, double radius) {
+    public Semicircle(Coordinate position, Angle rotation, double radius) {
         super(position, rotation, radius);
     }
 
-    public Semicircle(Coordinates position, double radius) {
+    public Semicircle(Coordinate position, double radius) {
         super(position, null, radius);
     }
 

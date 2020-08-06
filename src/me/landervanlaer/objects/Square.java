@@ -1,7 +1,7 @@
 package me.landervanlaer.objects;
 
 import me.landervanlaer.math.Angle;
-import me.landervanlaer.math.Coordinates;
+import me.landervanlaer.math.Coordinate;
 
 public class Square extends Shape {
     /**
@@ -9,11 +9,11 @@ public class Square extends Shape {
      */
     public double side;
 
-    public Square(Coordinates position, double side) {
+    public Square(Coordinate position, double side) {
         this(position, null, side);
     }
 
-    public Square(Coordinates position, Angle rotation, double side) {
+    public Square(Coordinate position, Angle rotation, double side) {
         super(position, rotation);
         this.side = side;
     }

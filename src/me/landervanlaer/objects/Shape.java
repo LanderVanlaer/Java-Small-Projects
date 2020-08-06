@@ -1,7 +1,7 @@
 package me.landervanlaer.objects;
 
 import me.landervanlaer.math.Angle;
-import me.landervanlaer.math.Coordinates;
+import me.landervanlaer.math.Coordinate;
 
 import java.awt.*;
 
@@ -11,9 +11,9 @@ import java.awt.*;
  */
 abstract public class Shape {
     /**
-     * The {@link Coordinates} of the left top corner
+     * The {@link Coordinate} of the left top corner
      */
-    private Coordinates position;
+    private Coordinate position;
     private Angle rotation;
     private Color color;
 
@@ -22,22 +22,22 @@ abstract public class Shape {
         this(null, null);
     }
 
-    public Shape(Coordinates position) {
+    public Shape(Coordinate position) {
         this(position, null);
     }
 
-    public Shape(Coordinates position, Angle rotation) {
+    public Shape(Coordinate position, Angle rotation) {
         this.position = position;
         this.rotation = rotation;
     }
 
 
     //GETTERS AND SETTERS
-    public Coordinates getPosition() {
+    public Coordinate getPosition() {
         return position;
     }
 
-    public void setPosition(Coordinates position) {
+    public void setPosition(Coordinate position) {
         this.position = position;
     }
 

@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-import me.landervanlaer.math.Coordinates;
+import me.landervanlaer.math.Coordinate;
 import me.landervanlaer.objects.Drawable;
 import me.landervanlaer.objects.Rectangle;
 
@@ -25,7 +25,7 @@ public class TowerStackGame extends Application implements Drawable {
 
     @Override
     public void start(Stage stage) throws Exception {
-        blocks.add(new Block(new Rectangle(new Coordinates(10, 10), 100, 100)));
+        blocks.add(new Block(new Rectangle(new Coordinate(10, 10), 100, 100)));
 
 
         Group group = new Group();

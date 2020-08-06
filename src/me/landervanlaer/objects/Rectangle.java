@@ -1,7 +1,7 @@
 package me.landervanlaer.objects;
 
 import me.landervanlaer.math.Angle;
-import me.landervanlaer.math.Coordinates;
+import me.landervanlaer.math.Coordinate;
 
 public class Rectangle extends Shape {
     private double width;
@@ -9,13 +9,13 @@ public class Rectangle extends Shape {
     private double height;
 
 
-    public Rectangle(Coordinates position, double width, double height) {
+    public Rectangle(Coordinate position, double width, double height) {
         super(position);
         this.width = width;
         this.height = height;
     }
 
-    public Rectangle(Coordinates position, Angle rotation, double width, double height) {
+    public Rectangle(Coordinate position, Angle rotation, double width, double height) {
         super(position, rotation);
         this.width = width;
         this.height = height;
