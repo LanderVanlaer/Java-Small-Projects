@@ -3,19 +3,22 @@ package me.landervanlaer.math;
 /**
  * A class to describe a two dimensional vector
  *
- * @author LanderVanLaer
- * @version 1.0 2020/08/04
+ * @author Lander Van Laer
+ * @version 1.1 2020/08/06
+ * @since 1.0
  */
-public class Vector {
+public class Vector implements Cloneable {
     /**
      * The x component of the {@link Vector}
      *
+     * @see #getSpeedX()
      * @since 1.0
      */
     private double speedX;
     /**
      * The y component of the {@link Vector}
      *
+     * @see #getSpeedY()
      * @since 1.0
      */
     private double speedY;
@@ -24,14 +27,15 @@ public class Vector {
      * Clones a {@link Vector}
      *
      * @param v The vector that has to be cloned.
-     * @since 1.0
+     * @see #clone()
+     * @since 1.1
      */
     public Vector(Vector v) {
         this(v.getSpeedX(), v.getSpeedY());
     }
 
     /**
-     * Creates a {@link Vector} of 0
+     * Creates a {@link Vector} of {@code 0}
      *
      * @since 1.0
      */
@@ -40,7 +44,7 @@ public class Vector {
     }
 
     /**
-     * Creates a {@link Vector} out of the given x & y speed
+     * Creates a {@link Vector} out of the given {@code x} & {@code y} speed
      *
      * @param speedX The x component of the vector
      * @param speedY The y component of the vector
@@ -52,9 +56,25 @@ public class Vector {
     }
 
     /**
+     * See {@link Object#clone()} for more info
+     *
+     * @return A copy of this {@link Object}
+     * @throws CloneNotSupportedException if the object's class does not support the {@code Cloneable} interface.
+     *                                    Subclasses that override the {@code clone} method can also throw this
+     *                                    exception to indicate that an instance cannot be cloned.
+     * @see Object#clone()
+     * @since 1.1
+     */
+    @Override
+    public Vector clone() throws CloneNotSupportedException {
+        return (Vector) super.clone();
+    }
+
+    /**
      * See {@link Object#toString()}
      *
      * @return A representation of the {@link Vector}
+     * @see Object#toString()
      * @since 1.0
      */
     @Override
@@ -121,6 +141,7 @@ public class Vector {
      *
      * @param vector The {@link Vector} to add.
      * @return The new {@link Vector}
+     * @see #subtract(Vector)
      * @since 1.0
      */
     public Vector add(Vector vector) {
@@ -134,6 +155,7 @@ public class Vector {
      *
      * @param vector The {@link Vector} to subtract with.
      * @return The new {@link Vector}
+     * @see #add(Vector)
      * @since 1.0
      */
     public Vector subtract(Vector vector) {
@@ -191,6 +213,7 @@ public class Vector {
      * Gives the x component of the {@link Vector}
      *
      * @return {@link #speedX}
+     * @see #speedX
      * @since 1.0
      */
     public double getSpeedX() {
@@ -201,6 +224,7 @@ public class Vector {
      * Change the x component of the {@link Vector} to the given value
      *
      * @param speedX The new x component
+     * @see #speedX
      * @since 1.0
      */
     public void setSpeedX(double speedX) {
@@ -211,6 +235,7 @@ public class Vector {
      * Gives the y component of the {@link Vector}
      *
      * @return {@link #speedY}
+     * @see #speedY
      * @since 1.0
      */
     public double getSpeedY() {
@@ -221,6 +246,7 @@ public class Vector {
      * Change the y component of the {@link Vector} to the given value
      *
      * @param speedY The new y component
+     * @see #speedY
      * @since 1.0
      */
     public void setSpeedY(double speedY) {
