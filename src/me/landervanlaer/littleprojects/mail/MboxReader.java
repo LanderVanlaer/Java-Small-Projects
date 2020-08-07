@@ -26,8 +26,9 @@ public class MboxReader {
                 builder.append('\n');
                 s = reader.nextLine();
             } while(!s.startsWith("From") && j++ < 1000);
+            System.out.println(prev);
 //            \/\\:\*\?"<>\|
-            prev = prev.replaceAll("[^a-zA-Z0-9-_.\\s'@]", "");
+            prev = prev.replaceAll("[^a-zA-Z0-9-_.\\s'@]", "").substring("From ".length());
 
             PrintWriter pw = new PrintWriter("C:\\Users\\LanderVanLaer\\Documents\\MAIL\\new mails\\" + prev + ".mbox", StandardCharsets.UTF_8);
             pw.print(builder.toString());
