@@ -1,6 +1,7 @@
 package me.landervanlaer.math.grids;
 
 import java.util.function.IntPredicate;
+import java.util.function.ObjIntConsumer;
 
 public class ArrayGrid2DIntegers {
     private int[][] grid;
@@ -101,6 +102,14 @@ public class ArrayGrid2DIntegers {
             return false;
         this.getGrid()[x][y] = value;
         return true;
+    }
+
+    public void forEach(ObjIntConsumer<int[]> consumer) {
+        for(int i = 0; i < getWidth(); i++) {
+            for(int j = 0; j < getHeight(); j++) {
+                consumer.accept(new int[]{i, j}, get(i, j));
+            }
+        }
     }
 
     public int getWidth() {
