@@ -20,7 +20,7 @@ public class Game extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Tic Tac Toe");
-        Parent root = FXMLLoader.load(this.getClass().getResource("me\\landervanlaer\\games\\TicTacToe\\GameLayout.fxml"));
+        Parent root = FXMLLoader.load(this.getClass().getResource("GameLayout.fxml"));
         Scene scene = new Scene(root, 800, 800);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
@@ -28,7 +28,7 @@ public class Game extends Application {
     }
 
     public static void clickButton(Button btn, int[] pos) {
-        if(btn.getText() == "")
+        if(btn.getText().equals(""))
             btn.setText(String.valueOf(PLAYER_CHAR[playerTurn1 ? 0 : 1]));
         playerTurn1 = !playerTurn1;
     }
@@ -56,7 +56,6 @@ public class Game extends Application {
                         (buttons[0][2].getText().equals(buttons[1][1].getText()) && buttons[1][1].getText().equals(buttons[2][0].getText())))) {
 
             playerWon(buttons[1][1].getText().charAt(0));
-            return;
         }
     }
 
