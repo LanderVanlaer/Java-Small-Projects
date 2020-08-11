@@ -1,4 +1,4 @@
-package me.landervanlaer.games.TicTacToe;
+package me.landervanlaer.games.ticTacToe;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;

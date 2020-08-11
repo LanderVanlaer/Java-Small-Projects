@@ -1,4 +1,4 @@
-package me.landervanlaer.games.TowerStack;
+package me.landervanlaer.games.towerStack;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
