@@ -26,4 +26,19 @@ public class Number {
     public static double map(double value, double min1, double max1, double min2, double max2) {
         return (value - min1) / (max1 - min1) * (max2 - min2) + min2;
     }
+
+    /**
+     * Check ifs the given {@link String} can be converted to an {@link Integer}
+     *
+     * @param input The string to see if it can be converted to an interger
+     * @return {@code true} if it can be converted, {@code false} if you can not
+     */
+    public static boolean isInteger(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch(NumberFormatException e) {
+            return false;
+        }
+    }
 }
