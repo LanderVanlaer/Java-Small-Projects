@@ -1,0 +1,29 @@
+GridPane {
+    -fx-font-size: 30px;
+    -fx-alignment: center;
+    -fx-grid-lines-visible: true;
+    -fx-border-width: 5px;
+}
+
+GridPane Label {
+    -fx-min-height: 50px;
+    -fx-min-width: 50px;
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+    -fx-alignment: center;
+}
+
+GridPane Label.right {
+    -fx-border-style: hidden solid hidden hidden;
+    -fx-border-width: 0 2px 0 0;
+}
+
+GridPane Label.bottom {
+    -fx-border-style: hidden hidden solid hidden;
+    -fx-border-width: 0 0 2px 0;
+}
+
+GridPane Label.bottom.right {
+    -fx-border-style: hidden solid solid hidden;
+    -fx-border-width: 0 2px 2px 0;
+}
