@@ -1,14 +1,37 @@
 package me.landervanlaer.util.lists;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class LinkedList<T> implements List<T>, Cloneable {
     private int size = 0;
     private LinkedListNode<T> firstNode = null;
     private LinkedListNode<T> lastNode = null;
+
+    /**
+     * Returns a string representation of the object. In general, the
+     * {@code toString} method returns a string that
+     * "textually represents" this object. The result should
+     * be a concise but informative representation that is easy for a
+     * person to read.
+     * It is recommended that all subclasses override this method.
+     * <p>
+     * The {@code toString} method for class {@code Object}
+     * returns a string consisting of the name of the class of which the
+     * object is an instance, the at-sign character `{@code @}', and
+     * the unsigned hexadecimal representation of the hash code of the
+     * object. In other words, this method returns a string equal to the
+     * value of:
+     * <blockquote>
+     * <pre>
+     * getClass().getName() + '@' + Integer.toHexString(hashCode())
+     * </pre></blockquote>
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return Arrays.toString(this.toArray());
+    }
 
     /**
      * Returns the number of elements in this list.  If this list contains
@@ -53,6 +76,16 @@ public class LinkedList<T> implements List<T>, Cloneable {
     }
 
     /**
+     * Returns an iterator over the elements in this list in proper sequence.
+     *
+     * @return an iterator over the elements in this list in proper sequence
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new Itr();
+    }
+
+    /**
      * Returns an array containing all of the elements in this list in proper
      * sequence (from first to last element).
      *
@@ -74,6 +107,20 @@ public class LinkedList<T> implements List<T>, Cloneable {
         for(int i = 0; i < size(); i++)
             list[i] = get(i);
         return list;
+    }
+
+    /**
+     * @param a the array into which the elements of this list are to
+     *          be stored, if it is big enough; otherwise, a new array of the
+     *          same runtime type is allocated for this purpose.
+     * @throws UnsupportedOperationException operation is not supported for this {@link List}
+     * @todo
+     * @deprecated Unsupported operation
+     */
+    @Override
+    @Deprecated
+    public <T1> T1[] toArray(T1[] a) {
+        throw new UnsupportedOperationException("This operation is not Supported");
     }
 
     /**
@@ -255,7 +302,32 @@ public class LinkedList<T> implements List<T>, Cloneable {
 
         return changed;
     }
-    
+
+    /**
+     * Retains only the elements in this list that are contained in the
+     * specified collection (optional operation).  In other words, removes
+     * from this list all of its elements that are not contained in the
+     * specified collection.
+     *
+     * @param c collection containing elements to be retained in this list
+     * @return {@code true} if this list changed as a result of the call
+     * @throws UnsupportedOperationException if the {@code retainAll} operation
+     *                                       is not supported by this list
+     * @throws ClassCastException            if the class of an element of this list
+     *                                       is incompatible with the specified collection
+     *                                       (<a href="Collection.html#optional-restrictions">optional</a>)
+     * @throws NullPointerException          if this list contains a null element and the
+     *                                       specified collection does not permit null elements
+     *                                       (<a href="Collection.html#optional-restrictions">optional</a>),
+     *                                       or if the specified collection is null
+     * @see #remove(Object)
+     * @see #contains(Object)
+     */
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
     /**
      * Removes all of the elements from this list (optional operation).
      * The list will be empty after this call returns.
@@ -303,6 +375,7 @@ public class LinkedList<T> implements List<T>, Cloneable {
      */
     @Override
     public T set(int i, T element) {
+        checkIfNull(element);
         return getNode(i).changeElement(element);
     }
 
@@ -341,14 +414,18 @@ public class LinkedList<T> implements List<T>, Cloneable {
      */
     @Override
     public void add(int i, T element) {
-        checkIndex(i);
+        checkIndexCanBeLast(i);
         checkIfNull(element);
 
         LinkedListNode<T> node = null;
 
         if(i == 0) {
-            firstNode = new LinkedListNode<>(element);
-            lastNode = firstNode;
+            if(isEmpty()) {
+                firstNode = new LinkedListNode<>(element);
+                lastNode = firstNode;
+            } else {
+                firstNode = new LinkedListNode<>(element, null, firstNode);
+            }
         } else if(i == size) {
             node = new LinkedListNode<>(element, lastNode);
             lastNode = node;
@@ -441,6 +518,38 @@ public class LinkedList<T> implements List<T>, Cloneable {
     }
 
     /**
+     * Returns a list iterator over the elements in this list (in proper
+     * sequence).
+     *
+     * @return a list iterator over the elements in this list (in proper
+     * sequence)
+     */
+    @Override
+    public ListIterator<T> listIterator() {
+        return new ListItr();
+    }
+
+    /**
+     * Returns a list iterator over the elements in this list (in proper
+     * sequence), starting at the specified position in the list.
+     * The specified index indicates the first element that would be
+     * returned by an initial call to {@link ListIterator#next next}.
+     * An initial call to {@link ListIterator#previous previous} would
+     * return the element with the specified index minus one.
+     *
+     * @param index index of the first element to be returned from the
+     *              list iterator (by a call to {@link ListIterator#next next})
+     * @return a list iterator over the elements in this list (in proper
+     * sequence), starting at the specified position in the list
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *                                   ({@code index < 0 || index > size()})
+     */
+    @Override
+    public ListIterator<T> listIterator(int index) {
+        return null;
+    }
+
+    /**
      * Returns a view of the portion of this list between the specified
      * {@code fromIndex}, inclusive, and {@code toIndex}, exclusive.  (If
      * {@code fromIndex} and {@code toIndex} are equal, the returned list is
@@ -477,7 +586,7 @@ public class LinkedList<T> implements List<T>, Cloneable {
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         checkIndex(fromIndex);
-        checkIndex(toIndex);
+        checkIndexCanBeLast(toIndex);
 
         LinkedList<T> list = new LinkedList<>();
 
@@ -486,7 +595,12 @@ public class LinkedList<T> implements List<T>, Cloneable {
         return list;
     }
 
-    public void checkIndex(int i) {
+    private void checkIndexCanBeLast(int i) {
+        if(i != size())
+            checkIndex(i);
+    }
+
+    private void checkIndex(int i) {
         Objects.checkIndex(i, size());
     }
 
@@ -533,6 +647,202 @@ public class LinkedList<T> implements List<T>, Cloneable {
                 this.previous.next = this.next;
             if(!(this.next == null))
                 this.next.previous = this.previous;
+        }
+    }
+
+    private class ListItr extends Itr implements ListIterator<T> {
+        private int previousIndex = -1;
+
+        public ListItr() {
+            super();
+        }
+
+        public ListItr(int startIndex) {
+            super(startIndex);
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public T next() {
+            previousIndex = super.currentIndex;
+            return super.next();
+        }
+
+        /**
+         * Returns {@code true} if this list iterator has more elements when
+         * traversing the list in the reverse direction.  (In other words,
+         * returns {@code true} if {@link #previous} would return an element
+         * rather than throwing an exception.)
+         *
+         * @return {@code true} if the list iterator has more elements when
+         * traversing the list in the reverse direction
+         */
+        @Override
+        public boolean hasPrevious() {
+            return super.currentIndex > 0;
+        }
+
+        /**
+         * Returns the previous element in the list and moves the cursor
+         * position backwards.  This method may be called repeatedly to
+         * iterate through the list backwards, or intermixed with calls to
+         * {@link #next} to go back and forth.  (Note that alternating calls
+         * to {@code next} and {@code previous} will return the same
+         * element repeatedly.)
+         *
+         * @return the previous element in the list
+         * @throws NoSuchElementException if the iteration has no previous
+         *                                element
+         */
+        @Override
+        public T previous() {
+            return LinkedList.this.get(--currentIndex);
+        }
+
+        /**
+         * Returns the index of the element that would be returned by a
+         * subsequent call to {@link #next}. (Returns list size if the list
+         * iterator is at the end of the list.)
+         *
+         * @return the index of the element that would be returned by a
+         * subsequent call to {@code next}, or list size if the list
+         * iterator is at the end of the list
+         */
+        @Override
+        public int nextIndex() {
+            return super.currentIndex;
+        }
+
+        /**
+         * Returns the index of the element that would be returned by a
+         * subsequent call to {@link #previous}. (Returns -1 if the list
+         * iterator is at the beginning of the list.)
+         *
+         * @return the index of the element that would be returned by a
+         * subsequent call to {@code previous}, or -1 if the list
+         * iterator is at the beginning of the list
+         */
+        @Override
+        public int previousIndex() {
+            return super.currentIndex - 1;
+        }
+
+        /**
+         * Replaces the last element returned by {@link #next} or
+         * {@link #previous} with the specified element (optional operation).
+         * This call can be made only if neither {@link #remove} nor {@link
+         * #add} have been called after the last call to {@code next} or
+         * {@code previous}.
+         *
+         * @param t the element with which to replace the last element returned by
+         *          {@code next} or {@code previous}
+         * @throws UnsupportedOperationException if the {@code set} operation
+         *                                       is not supported by this list iterator
+         * @throws ClassCastException            if the class of the specified element
+         *                                       prevents it from being added to this list
+         * @throws IllegalArgumentException      if some aspect of the specified
+         *                                       element prevents it from being added to this list
+         * @throws IllegalStateException         if neither {@code next} nor
+         *                                       {@code previous} have been called, or {@code remove} or
+         *                                       {@code add} have been called after the last call to
+         *                                       {@code next} or {@code previous}
+         */
+        @Override
+        public void set(T t) {
+            if(previousIndex == -1)
+                throw new IllegalStateException("Neither next() nor previous() has already been called");
+            LinkedList.this.set(previousIndex, t);
+        }
+
+        /**
+         * Inserts the specified element into the list (optional operation).
+         * The element is inserted immediately before the element that
+         * would be returned by {@link #next}, if any, and after the element
+         * that would be returned by {@link #previous}, if any.  (If the
+         * list contains no elements, the new element becomes the sole element
+         * on the list.)  The new element is inserted before the implicit
+         * cursor: a subsequent call to {@code next} would be unaffected, and a
+         * subsequent call to {@code previous} would return the new element.
+         * (This call increases by one the value that would be returned by a
+         * call to {@code nextIndex} or {@code previousIndex}.)
+         *
+         * @param t the element to insert
+         * @throws UnsupportedOperationException if the {@code add} method is
+         *                                       not supported by this list iterator
+         * @throws ClassCastException            if the class of the specified element
+         *                                       prevents it from being added to this list
+         * @throws IllegalArgumentException      if some aspect of this element
+         *                                       prevents it from being added to this list
+         */
+        @Override
+        public void add(T t) {
+            LinkedList.this.add(super.currentIndex, t);
+        }
+    }
+
+    private class Itr implements Iterator<T> {
+        protected int currentIndex = 0;
+
+        public Itr(int startIndex) {
+            this.currentIndex = startIndex;
+        }
+
+        public Itr() {
+        }
+
+        /**
+         * Removes from the underlying collection the last element returned
+         * by this iterator (optional operation).  This method can be called
+         * only once per call to {@link #next}.
+         * <p>
+         * The behavior of an iterator is unspecified if the underlying collection
+         * is modified while the iteration is in progress in any way other than by
+         * calling this method, unless an overriding class has specified a
+         * concurrent modification policy.
+         * <p>
+         * The behavior of an iterator is unspecified if this method is called
+         * after a call to the {@link #forEachRemaining forEachRemaining} method.
+         *
+         * @throws UnsupportedOperationException if the {@code remove}
+         *                                       operation is not supported by this iterator
+         * @throws IllegalStateException         if the {@code next} method has not
+         *                                       yet been called, or the {@code remove} method has already
+         *                                       been called after the last call to the {@code next}
+         *                                       method
+         * @implSpec The default implementation throws an instance of
+         * {@link UnsupportedOperationException} and performs no other action.
+         */
+        @Override
+        public void remove() {
+            LinkedList.this.remove(currentIndex);
+        }
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return currentIndex < LinkedList.this.size();
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public T next() {
+            return LinkedList.this.get(currentIndex++);
         }
     }
 }
