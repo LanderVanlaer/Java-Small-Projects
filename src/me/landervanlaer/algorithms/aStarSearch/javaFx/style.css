@@ -1,0 +1,25 @@
+AnchorPane.top {
+    -fx-background-color: #ececec;
+}
+
+AnchorPane.center GridPane Button {
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+}
+
+AnchorPane.center GridPane Button.not-available {
+    -fx-background-color: #151515;
+}
+
+
+AnchorPane.center GridPane Button.start {
+    -fx-background-color: #455366;
+}
+
+AnchorPane.center GridPane Button.end {
+    -fx-background-color: #3476b8;
+}
+
+AnchorPane.center GridPane Button.path {
+    -fx-background-color: #345132;
+}

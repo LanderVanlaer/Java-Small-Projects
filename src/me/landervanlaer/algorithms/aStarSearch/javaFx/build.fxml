@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="750" prefWidth="1000" stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/11.0.1"
+            fx:controller="me.landervanlaer.algorithms.aStarSearch.javaFx.Build">
+    <top>
+        <AnchorPane prefHeight="50.0" prefWidth="600.0" styleClass="top" BorderPane.alignment="CENTER">
+            <Label layoutX="14.0" layoutY="18.0" text="Width"/>
+            <Spinner fx:id="widthSpinner" layoutX="56.0" layoutY="14.0" prefWidth="70.0">
+                <valueFactory>
+                    <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="65"
+                                                                    min="10"/>
+                </valueFactory>
+            </Spinner>
+
+            <Label layoutX="137.0" layoutY="19.0" text="Height"/>
+            <Spinner fx:id="heightSpinner" layoutX="182.0" layoutY="15.0" prefWidth="70.0">
+                <valueFactory>
+                    <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="45"
+                                                                    min="10"/>
+                </valueFactory>
+            </Spinner>
+
+            <Label layoutX="267.0" layoutY="19.0" text="Cell Width"/>
+            <Spinner fx:id="cellWidthSpinner" layoutX="329.0" layoutY="15.0" prefHeight="25.0" prefWidth="70.0">
+                <valueFactory>
+                    <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="2" initialValue="30" max="100"
+                                                                    min="30"/>
+                </valueFactory>
+            </Spinner>
+            <Button layoutX="421.0" layoutY="14.0" mnemonicParsing="false" onAction="#start" text="Start"/>
+            <Button layoutX="479.0" layoutY="13.0" mnemonicParsing="false" onAction="#clearField" text="Clear"/>
+            <Label layoutX="841.0" layoutY="10.0" text="Hold SHIFT to add"/>
+            <Label layoutX="841.0" layoutY="27.0" text="Hold ALT to remove"/>
+            <Button layoutX="567.0" layoutY="14.0" mnemonicParsing="false" onAction="#setStartPoint"
+                    text="Set Start point"/>
+            <Button layoutX="679.0" layoutY="14.0" mnemonicParsing="false" onAction="#setEndPoint"
+                    text="Set End point"/>
+        </AnchorPane>
+    </top>
+    <center>
+        <AnchorPane styleClass="center" BorderPane.alignment="CENTER">
+            <GridPane fx:id="gridPane" alignment="CENTER" AnchorPane.leftAnchor="0.0"/>
+        </AnchorPane>
+    </center>
+</BorderPane>
