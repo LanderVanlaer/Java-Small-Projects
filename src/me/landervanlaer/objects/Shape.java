@@ -8,7 +8,11 @@ import java.awt.*;
 /**
  * TODO Add contains Tests if the specified coordinates are inside the boundary of the Shape, as described by the definition of insideness.
  * TODO Get bounds, returns rectangle that contains the figure
+ * {@link Shape} and other objects needs to be recreated.
+ *
+ * @deprecated
  */
+@Deprecated
 abstract public class Shape {
     /**
      * The {@link Coordinate} of the left top corner
