@@ -2,11 +2,13 @@ package me.landervanlaer.math;
 
 /**
  * A class that represents an angle by only storing the radians.
+ *
+ * @author Lander Van Laer
+ * @version 2.0 2021/01/2
  */
 public class Angle {
-    private double rad;
     /**
-     * If the {@link Angle} has to be simplified when you need the value. When turning it from true to false the real value remains unchanged.
+     * If the {@link Angle} has to be simplified when you need the value.
      * So, if the value is {@code true}:
      * <blockquote>
      * <code>
@@ -20,7 +22,11 @@ public class Angle {
      * </code>
      * </blockquote>
      */
-    private boolean simplify = true;
+    public static final boolean SIMPLIFY = false;
+    /**
+     * The radians of the {@link Angle}
+     */
+    private double rad;
 
     /**
      * Runs {@link #Angle(double)} with a given paremeter of {@code 0}
@@ -35,7 +41,7 @@ public class Angle {
      * Constructs an {@link Angle} with the given radians value
      */
     public Angle(double rad) {
-        this.setRadians(rad);
+        this.rad = rad;
     }
 
     /**
@@ -59,16 +65,13 @@ public class Angle {
     }
 
     /**
-     * Simplifies an radians angle, gives the absolute angle value
+     * Simplifies an radians angle, it gives the absolute angle value.
+     * <p>
      * It calculates the lowest angle in radians that is above {@code 0} and equal to the given angle
-     * <blockquote>
-     * <code>
-     * 2D * Math.PI == 0
-     * </code>
-     * </blockquote>
      *
      * @param radians The angle in radians you want to convert
      * @return The absolute angle in radians
+     * @see #simplifyDegrees(double)
      */
     static public double simplifyRadians(double radians) {
         final double DOUBLE_PI = Math.PI * 2D;
@@ -81,16 +84,13 @@ public class Angle {
     }
 
     /**
-     * Simplifies an degrees angle, gives the absolute angle value
+     * Simplifies an degrees angle, it gives the absolute angle value.
+     * <p>
      * It calculates the lowest angle in degrees that is above {@code 0} and equal to the given angle
-     * <blockquote>
-     * <code>
-     * 2D * Math.PI == 0
-     * </code>
-     * </blockquote>
      *
      * @param degrees The angle in degrees you want to convert
      * @return The absolute angle in degrees
+     * @see #simplifyRadians(double)
      */
     static public double simplifyDegrees(double degrees) {
         while(degrees < 0 || degrees >= 360D) {
@@ -102,35 +102,72 @@ public class Angle {
 
     /**
      * See {@link Object#equals(Object)} for more info.
-     * If {@link #simplify} in both {@link Angle} objects are {@code true}, it is going to compare the simplified values
+     * Runs {@link #equals(Object, boolean)} with the constant {@link Angle#SIMPLIFY} as the given boolean.
      *
      * @param o the reference object with which to compare.
      * @return {@code true} if this object is the same as the obj
-     * argument; {@code false} otherwise.
-     * @see Object#equals(Object)
+     * * argument; {@code false} otherwise.
+     * @see #equals(Object, boolean)
+     * @see Angle#SIMPLIFY
      */
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
+        return this.getClass() == o.getClass() && equals(o, false);
+    }
+
+    /**
+     * See {@link Object#equals(Object)} for more info.
+     * If the given boolean is {@code true}, it is going to compare the simplified values.
+     * See {@link Angle#SIMPLIFY} for more info.
+     *
+     * @param o        the reference object with which to compare.
+     * @param simplify if it needs to check the simplified values
+     * @return {@code true} if this object is the same as the obj
+     * argument; {@code false} otherwise.
+     * @see Object#equals(Object)
+     * @see Angle#SIMPLIFY
+     */
+    public boolean equals(Object o, boolean simplify) {
+        if(super.equals(o)) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
+
         Angle angle = (Angle) o;
-        if(this.isSimplify() && angle.isSimplify())
-            return angle.getRadians() == this.getRadians();
+
+        if(simplify)
+            return Double.compare(angle.getRadians(true), this.getRadians(true)) == 0;
         else
-            return angle.getValue() == this.getValue();
+            return Double.compare(angle.getRadians(), this.getRadians()) == 0;
+    }
+
+    /**
+     * Simplifies the {@link Angle} radians value. See {@link #simplifyRadians(double)} for more info
+     *
+     * @return Wheter the radians value is changed
+     * @see #simplifyRadians(double)
+     * @since 2.0
+     */
+    public boolean simplify() {
+        final double prevRad = this.getRadians(false);
+        final double newRad = Angle.simplifyRadians(prevRad);
+
+        if(prevRad == newRad) return false;
+
+        setRadians(newRad);
+        return true;
     }
 
     /**
      * Calculates the {@link Angle} value in radians.
-     * And if {@link #simplify} is {@code true}, it gives the simplified version of that angle
+     * <p>
+     * Runs {@link #getRadians(boolean)} with the constant {@link Angle#SIMPLIFY} as the given boolean.
      *
      * @return The angle in radians
+     * @see Angle#SIMPLIFY
+     * @see #getRadians(boolean)
+     * @since 2.0
      */
     public double getRadians() {
-        if(this.isSimplify())
-            return Angle.simplifyRadians(rad);
-        else
-            return rad;
+        return getRadians(Angle.SIMPLIFY);
     }
 
     /**
@@ -143,16 +180,32 @@ public class Angle {
     }
 
     /**
+     * Calculates the {@link Angle} value in radians.
+     * And if the given boolean is {@code true}, it gives the simplified version of that Angle.
+     * See {@link Angle#SIMPLIFY} for more info.
+     *
+     * @param simplify Whether it should be simplified or not
+     * @return The angle in radians
+     * @see Angle#SIMPLIFY
+     * @see #getRadians()
+     * @since 2.0
+     */
+    public double getRadians(boolean simplify) {
+        return simplify ? Angle.simplifyRadians(rad) : rad;
+    }
+
+    /**
      * Calculates the {@link Angle} value in degrees.
-     * And if {@link #simplify} is {@code true}, it gives the simplified version of that angle
+     * <p>
+     * Runs {@link #getRadians(boolean)} with the constant {@link Angle#SIMPLIFY} as the given boolean.
      *
      * @return The angle in degrees
+     * @see Angle#SIMPLIFY
+     * @see #getDegrees(boolean)
+     * @since 2.0
      */
     public double getDegrees() {
-        if(this.isSimplify())
-            return Angle.simplifyDegrees(Angle.radiansToDegrees(this.getRadians()));
-        else
-            return Angle.radiansToDegrees(this.getRadians());
+        return getDegrees(Angle.SIMPLIFY);
     }
 
     /**
@@ -165,32 +218,19 @@ public class Angle {
     }
 
     /**
-     * Returns {@link #simplify}
+     * Calculates the {@link Angle} value in degrees.
+     * And if the given boolean is {@code true}, it gives the simplified version of that angle.
+     * See {@link Angle#SIMPLIFY} for more info.
      *
-     * @return {@link #simplify}
-     * @see #simplify
+     * @param simplify Whether it should be simplified or not
+     * @return The angle in degrees
+     * @see Angle#SIMPLIFY
+     * @see #getDegrees()
+     * @since 2.0
      */
-    public boolean isSimplify() {
-        return simplify;
-    }
-
-    /**
-     * Set the {@link #simplify} value to the given value
-     *
-     * @param simplify The value to set {@link #simplify} to
-     * @see #simplify
-     */
-    public void setSimplify(boolean simplify) {
-        this.simplify = simplify;
-    }
-
-    /**
-     * Get innital value of {@link #rad}
-     *
-     * @return {{@link #rad}}
-     * @hidden
-     */
-    protected double getValue() {
-        return this.rad;
+    public double getDegrees(boolean simplify) {
+        return simplify ?
+                Angle.simplifyDegrees(Angle.radiansToDegrees(this.getRadians()))
+                : Angle.radiansToDegrees(this.getRadians());
     }
 }

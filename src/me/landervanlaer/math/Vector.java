@@ -4,24 +4,23 @@ package me.landervanlaer.math;
  * A class to describe a two dimensional vector
  *
  * @author Lander Van Laer
- * @version 1.1 2020/08/06
- * @since 1.0
+ * @version 2.0 2021/01/2
  */
 public class Vector implements Cloneable {
     /**
      * The x component of the {@link Vector}
      *
-     * @see #getSpeedX()
+     * @see #getX()
      * @since 1.0
      */
-    private double speedX;
+    private double x;
     /**
      * The y component of the {@link Vector}
      *
-     * @see #getSpeedY()
+     * @see #getY()
      * @since 1.0
      */
-    private double speedY;
+    private double y;
 
     /**
      * Clones a {@link Vector}
@@ -31,7 +30,7 @@ public class Vector implements Cloneable {
      * @since 1.1
      */
     public Vector(Vector v) {
-        this(v.getSpeedX(), v.getSpeedY());
+        this(v.getX(), v.getY());
     }
 
     /**
@@ -48,11 +47,60 @@ public class Vector implements Cloneable {
      *
      * @param speedX The x component of the vector
      * @param speedY The y component of the vector
-     * @since 1.0
+     * @since 2.0
      */
     public Vector(double speedX, double speedY) {
-        this.setSpeedX(speedX);
-        this.setSpeedY(speedY);
+        this.x = speedX;
+        this.y = speedY;
+    }
+
+    /**
+     * Creates a {@link Vector} from a {@link Coordinate} to another Coordinate
+     *
+     * @param from The starting Coordinate of the Vector
+     * @param to   The ending Coordinate of the Vector
+     * @since 2.0
+     */
+    public Vector(Coordinate from, Coordinate to) {
+        this(to.getX() - from.getX(), to.getY() - from.getY());
+    }
+
+    /**
+     * Adds the 2 given Vectors to eachother and returns a new {@link Vector}.
+     * The given Vectors are not changed
+     * <code>
+     * return vector1 + vector2
+     * </code>
+     *
+     * @param vector1 A Vector to add to the other
+     * @param vector2 A Vector to add to the other
+     * @return A new Vector
+     * @see #add(Vector)
+     * @see Vector#sub(Vector, Vector)
+     * @since 2.0
+     */
+    public static Vector add(Vector vector1, Vector vector2) {
+        return new Vector(vector1.getX() + vector2.getX(),
+                vector1.getY() + vector2.getY());
+    }
+
+    /**
+     * Subtrats the 2 given Vectors from eachother and returns a new {@link Vector}.
+     * The given Vectors are not changed
+     * <code>
+     * return vector1 - vector2
+     * </code>
+     *
+     * @param vector1 A Vector to subtract from
+     * @param vector2 A Vector to subtract with
+     * @return A new Vector
+     * @see #sub(Vector)
+     * @see Vector#add(Vector, Vector)
+     * @since 2.0
+     */
+    public static Vector sub(Vector vector1, Vector vector2) {
+        return new Vector(vector1.getX() - vector2.getX(),
+                vector1.getY() - vector2.getY());
     }
 
     /**
@@ -67,7 +115,10 @@ public class Vector implements Cloneable {
      */
     @Override
     public Vector clone() throws CloneNotSupportedException {
-        return (Vector) super.clone();
+        Vector clone = (Vector) super.clone();
+        clone.setX(getX());
+        clone.setY(getY());
+        return clone;
     }
 
     /**
@@ -80,8 +131,8 @@ public class Vector implements Cloneable {
     @Override
     public String toString() {
         return "Vector{" +
-                "speedX=" + speedX +
-                ", speedY=" + speedY +
+                "speedX=" + x +
+                ", speedY=" + y +
                 '}';
     }
 
@@ -92,30 +143,35 @@ public class Vector implements Cloneable {
      * @since 1.0
      */
     public Angle getAngle() {
-        return new Angle(Math.acos(this.getSpeedX() / this.getTotalSpeed()));
+        return new Angle(Math.acos(this.getX() / this.getMag()));
     }
 
     /**
-     * Works just like {@link #setAngle(Angle, double)} only the length is set to 1 (a unit vector).
+     * Change the Vectors {@link Angle} to the given Angle by not changing the magnitude
      *
      * @param angle the desired {@link Angle}
-     * @since 1.0
+     * @since 2.0
      */
     public void setAngle(Angle angle) {
-        this.setAngle(angle, 1);
+        final double mag = getMag();
+        final double rad = angle.getRadians();
+        this.setX(Math.cos(rad) * mag);
+        this.setY(Math.sin(rad) * mag);
     }
 
     /**
-     * Change the {@link Vector} to an angle with a desired length
+     * Adds the given {@link Angle} to the Angle of the {@link Vector}
+     * <p>
+     * So if the Angle of the Vector is {@code 180} and you rotate it with {@code 90},
+     * the Angle of the Vector will be {@code 270}
      *
-     * @param angle the desired {@link Angle}
-     * @param speed the new length of the {@link Vector}
-     * @since 1.0
+     * @param angle An Angle to add to the Angle of the Vector
+     * @see #getAngle()
+     * @see #setAngle(Angle)
+     * @since 2.0
      */
-    public void setAngle(Angle angle, double speed) {
-        final double rad = angle.getRadians();
-        this.setSpeedX(Math.cos(rad) * speed);
-        this.setSpeedY(Math.sin(rad) * speed);
+    public void rotate(Angle angle) {
+        this.setAngle(new Angle(getAngle().getRadians() + angle.getRadians()));
     }
 
     /**
@@ -132,21 +188,21 @@ public class Vector implements Cloneable {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Vector vector = (Vector) o;
-        return Double.compare(vector.getSpeedX(), getSpeedX()) == 0 &&
-                Double.compare(vector.getSpeedY(), getSpeedY()) == 0;
+        return Double.compare(vector.getX(), getX()) == 0 &&
+                Double.compare(vector.getY(), getY()) == 0;
     }
 
     /**
      * Adds a {@link Vector} to the vector
      *
      * @param vector The {@link Vector} to add.
-     * @return The new {@link Vector}
-     * @see #subtract(Vector)
+     * @return This {@link Vector}
+     * @see #sub(Vector)
      * @since 1.0
      */
     public Vector add(Vector vector) {
-        this.setSpeedX(this.getSpeedX() + vector.getSpeedX());
-        this.setSpeedX(this.getSpeedY() + vector.getSpeedY());
+        this.setX(this.getX() + vector.getX());
+        this.setX(this.getY() + vector.getY());
         return this;
     }
 
@@ -154,102 +210,149 @@ public class Vector implements Cloneable {
      * Subtracts a {@link Vector} from the vector
      *
      * @param vector The {@link Vector} to subtract with.
-     * @return The new {@link Vector}
+     * @return This {@link Vector}
      * @see #add(Vector)
      * @since 1.0
      */
-    public Vector subtract(Vector vector) {
-        this.setSpeedX(this.getSpeedX() - vector.getSpeedX());
-        this.setSpeedX(this.getSpeedY() - vector.getSpeedY());
+    public Vector sub(Vector vector) {
+        this.setX(this.getX() - vector.getX());
+        this.setX(this.getY() - vector.getY());
         return this;
+    }
+
+    /**
+     * Multiplies the vector by a scalar
+     * <p>
+     * When multiplying a vector by a scalar, the x and y components of the vector are all multiplied by the scalar.
+     *
+     * @param scalar The scalar
+     * @see #div(double)
+     * @since 2.0
+     */
+    public void mult(double scalar) {
+        this.setX(this.getX() * scalar);
+        this.setY(this.getY() * scalar);
+    }
+
+    /**
+     * Divides the vector by a scalar
+     * <p>
+     * When dividing a vector by a scalar, the x and y components of the vector are all divided by the scalar.
+     *
+     * @param scalar The scalar to divide with
+     * @see #mult(double)
+     * @since 2.0
+     */
+    public void div(double scalar) {
+        mult(1 / scalar);
     }
 
     /**
      * Normalize the {@link Vector} to length 1 (make it a unit vector).
      *
-     * @since 1.0
+     * @since 2.0
      */
     public void normalize() {
-        final double length = Math.hypot(this.getSpeedX(), this.getSpeedY());
-        this.setSpeedX(this.getSpeedX() / length);
-        this.setSpeedY(this.getSpeedY() / length);
+        final double mag = getMag();
+        this.setX(this.getX() / mag);
+        this.setY(this.getY() / mag);
     }
 
     /**
-     * Calculates the total speed of the {@link Vector} out of the x and y component
+     * Calculates the total magnitude of the {@link Vector} out of the x and y component
      *
      * @return The length of the {@link Vector}
-     * @since 1.0
+     * @since 2.0
      */
-    public double getTotalSpeed() {
-        return Math.hypot(this.getSpeedX(), this.getSpeedY());
+    public double getMag() {
+        return Math.hypot(this.getX(), this.getY());
     }
 
     /**
-     * Inverts the speed of the x component
-     * <code>
-     * newSpeedX = -{@link #speedX}
-     * </code>
+     * Set the magnitude of this vector to the given length
      *
-     * @since 1.0
+     * @param len The new length of the {@link Vector}
+     * @see #getMag()
+     * @since 2.0
      */
-    public void invertSpeedX() {
-        this.setSpeedX(-this.getSpeedX());
+    public void setMag(double len) {
+        this.normalize();
+        this.mult(len);
     }
 
     /**
-     * Inverts the speed of the y component
-     * <code>
-     * newSpeedY = -{@link #speedY}
-     * </code>
+     * Limits the magnitude to a desired maximum
+     * <p>
+     * If {@code magnitude > max} then {@code magnitude = max}
+     *
+     * @param max The maximum limit
+     * @see #getMag()
+     * @see #setMag(double)
+     * @since 2.0
+     */
+    public void limit(double max) {
+        if(getMag() > max) setMag(max);
+    }
+
+    /**
+     * Inverts the {@link #x} component
      *
      * @since 1.0
      */
-    public void invertSpeedY() {
-        this.setSpeedY(-this.getSpeedY());
+    public void invertX() {
+        this.setX(-this.getX());
+    }
+
+    /**
+     * Inverts the {@link #y} component
+     *
+     * @since 1.0
+     */
+    public void invertY() {
+        this.setY(-this.getY());
     }
 
     /**
      * Gives the x component of the {@link Vector}
      *
-     * @return {@link #speedX}
-     * @see #speedX
+     * @return {@link #x}
+     * @see #x
      * @since 1.0
      */
-    public double getSpeedX() {
-        return speedX;
+    public double getX() {
+        return x;
     }
 
     /**
      * Change the x component of the {@link Vector} to the given value
      *
-     * @param speedX The new x component
-     * @see #speedX
+     * @param x The new x component
+     * @see #x
      * @since 1.0
      */
-    public void setSpeedX(double speedX) {
-        this.speedX = speedX;
+    public void setX(double x) {
+        this.x = x;
     }
 
     /**
      * Gives the y component of the {@link Vector}
      *
-     * @return {@link #speedY}
-     * @see #speedY
+     * @return {@link #y}
+     * @see #y
      * @since 1.0
      */
-    public double getSpeedY() {
-        return speedY;
+    public double getY() {
+        return y;
     }
 
     /**
      * Change the y component of the {@link Vector} to the given value
      *
-     * @param speedY The new y component
-     * @see #speedY
+     * @param y The new y component
+     * @see #y
      * @since 1.0
      */
-    public void setSpeedY(double speedY) {
-        this.speedY = speedY;
+    public void setY(double y) {
+        this.y = y;
     }
 }

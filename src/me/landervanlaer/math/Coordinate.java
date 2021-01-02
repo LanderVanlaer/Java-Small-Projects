@@ -4,7 +4,7 @@ package me.landervanlaer.math;
  * A class representing a Coordinate, by storing the x & y component
  *
  * @author LanderVanLaer
- * @version 1.3 2020/08/06
+ * @version 1.4 2021/01/2
  * @since 1.3
  */
 public class Coordinate {
@@ -70,8 +70,8 @@ public class Coordinate {
      * @since 1.1
      */
     public void add(Vector v) {
-        setX(getX() + v.getSpeedX());
-        setY(getY() + v.getSpeedY());
+        setX(getX() + v.getX());
+        setY(getY() + v.getY());
     }
 
     /**
