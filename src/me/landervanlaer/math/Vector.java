@@ -4,7 +4,7 @@ package me.landervanlaer.math;
  * A class to describe a two dimensional vector
  *
  * @author Lander Van Laer
- * @version 3.0 2021/01/3
+ * @version 4.0 2021/01/3
  */
 public class Vector implements Cloneable {
     /**
@@ -90,6 +90,43 @@ public class Vector implements Cloneable {
     public static Vector sub(Vector vector1, Vector vector2) {
         return new Vector(vector1.getX() - vector2.getX(),
                 vector1.getY() - vector2.getY());
+    }
+
+    /**
+     * Multiplies the given Vector by a scalar and returns a new {@link Vector}.
+     * The given Vector will not change
+     *
+     * <code>
+     * return vector * scalar
+     * </code>
+     *
+     * @param vector A Vector that must be multiplied
+     * @param scalar A scalar to multiply with | multiplier
+     * @return A new Vector
+     * @see #mult(double)
+     * @see Vector#div(Vector, double)
+     * @since 4.0
+     */
+    public static Vector mult(Vector vector, double scalar) {
+        return new Vector(vector.getX() * scalar, vector.getY() * scalar);
+    }
+
+    /**
+     * Divides the given Vector by a scalar and returns a new {@link Vector}.
+     * The given Vector will not change
+     * <code>
+     * return vector / scalar
+     * </code>
+     *
+     * @param vector A Vector to divide from | numerator
+     * @param scalar A scalar to divide with | denominator
+     * @return A new Vector
+     * @see #div(double)
+     * @see Vector#mult(Vector, double)
+     * @since 4.0
+     */
+    public static Vector div(Vector vector, double scalar) {
+        return Vector.mult(vector, 1 / scalar);
     }
 
     /**
