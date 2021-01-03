@@ -4,7 +4,7 @@ package me.landervanlaer.math;
  * A class to describe a two dimensional vector
  *
  * @author Lander Van Laer
- * @version 2.0 2021/01/2
+ * @version 3.0 2021/01/3
  */
 public class Vector implements Cloneable {
     /**
@@ -21,17 +21,6 @@ public class Vector implements Cloneable {
      * @since 1.0
      */
     private double y;
-
-    /**
-     * Clones a {@link Vector}
-     *
-     * @param v The vector that has to be cloned.
-     * @see #clone()
-     * @since 1.1
-     */
-    public Vector(Vector v) {
-        this(v.getX(), v.getY());
-    }
 
     /**
      * Creates a {@link Vector} of {@code 0}
@@ -202,7 +191,7 @@ public class Vector implements Cloneable {
      */
     public Vector add(Vector vector) {
         this.setX(this.getX() + vector.getX());
-        this.setX(this.getY() + vector.getY());
+        this.setY(this.getY() + vector.getY());
         return this;
     }
 
@@ -216,7 +205,7 @@ public class Vector implements Cloneable {
      */
     public Vector sub(Vector vector) {
         this.setX(this.getX() - vector.getX());
-        this.setX(this.getY() - vector.getY());
+        this.setY(this.getY() - vector.getY());
         return this;
     }
 
@@ -278,6 +267,18 @@ public class Vector implements Cloneable {
     public void setMag(double len) {
         this.normalize();
         this.mult(len);
+    }
+
+    /**
+     * Make it a "zero vector" | "null vector".
+     * <p>
+     * Sets the {@link #x} and {@link #y} component to {@code 0}.
+     *
+     * @since 2.1
+     */
+    public void zero() {
+        setX(0);
+        setY(0);
     }
 
     /**
