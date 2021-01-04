@@ -4,7 +4,7 @@ package me.landervanlaer.math;
  * A class to describe a two dimensional vector
  *
  * @author Lander Van Laer
- * @version 4.0 2021/01/3
+ * @version 4.1 2021/01/4
  */
 public class Vector implements Cloneable {
     /**
@@ -133,17 +133,21 @@ public class Vector implements Cloneable {
      * See {@link Object#clone()} for more info
      *
      * @return A copy of this {@link Object}
-     * @throws CloneNotSupportedException if the object's class does not support the {@code Cloneable} interface.
-     *                                    Subclasses that override the {@code clone} method can also throw this
-     *                                    exception to indicate that an instance cannot be cloned.
      * @see Object#clone()
-     * @since 1.1
+     * @since 4.1
      */
     @Override
-    public Vector clone() throws CloneNotSupportedException {
-        Vector clone = (Vector) super.clone();
-        clone.setX(getX());
-        clone.setY(getY());
+    public Vector clone() {
+        Vector clone = null;
+        try {
+            clone = (Vector) super.clone();
+        } catch(CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        if(clone != null) {
+            clone.setX(getX());
+            clone.setY(getY());
+        }
         return clone;
     }
 
@@ -330,6 +334,17 @@ public class Vector implements Cloneable {
      */
     public void limit(double max) {
         if(getMag() > max) setMag(max);
+    }
+
+    /**
+     * Inverts the {@link Vector},
+     * so the {@link #x} and {@link #y} component will be multiplied by {@code -1}.
+     *
+     * @see #mult(double)
+     * @since 4.1
+     */
+    public void invert() {
+        mult(-1);
     }
 
     /**
