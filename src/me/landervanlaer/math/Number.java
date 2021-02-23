@@ -48,11 +48,11 @@ public class Number {
      * @param number The number that has to be checked
      * @return Whether the given integer is a prime number or not.
      */
-    public static boolean isPrimeNumber(final int number) {
+    public static boolean isPrimeNumber(final long number) {
         if(number == 2) return true;
         if(number <= 1 || number % 2 == 0) return false;
 
-        final int half = number / 2;
+        final long half = number / 2;
         for(int i = 3; i < half; i += 2)
             if(number % i == 0)
                 return false;
