@@ -49,11 +49,11 @@ public class Number {
      * @return Whether the given integer is a prime number or not.
      */
     public static boolean isPrimeNumber(final long number) {
-        if(number == 2) return true;
-        if(number <= 1 || number % 2 == 0) return false;
+        if(number == 2L) return true;
+        if(number <= 1L || number % 2L == 0) return false;
 
-        final long half = number / 2;
-        for(int i = 3; i < half; i += 2)
+        final long half = number / 2L;
+        for(long i = 3L; i < half; i += 2L)
             if(number % i == 0)
                 return false;
 
