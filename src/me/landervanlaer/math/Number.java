@@ -59,4 +59,18 @@ public class Number {
 
         return true;
     }
+
+    /**
+     * Searches for the nearest prime number that is smaller than the given number.
+     * If the number is less than or equal to {@code 1}, then {@code 1} is returned.
+     *
+     * @param i The number from which to look
+     * @return The nearest prime number smaller than the given number
+     * @see #isPrimeNumber(long)
+     */
+    public static int getClosestPrimeNumber(int i) {
+        if(i <= 1) return 1;
+        if(Number.isPrimeNumber(i)) return i;
+        return getClosestPrimeNumber(i - 1);
+    }
 }
