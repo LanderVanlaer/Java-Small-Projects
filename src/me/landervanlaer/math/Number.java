@@ -73,4 +73,56 @@ public class Number {
         if(Number.isPrimeNumber(i)) return i;
         return getClosestPrimeNumber(i - 1);
     }
+
+    /**
+     * Constrains a value between a min and max value
+     *
+     * @param n   number to constrain
+     * @param min minimum limit
+     * @param max maximum limit
+     * @return The constrained number
+     */
+    public static double constrain(double n, double min, double max) {
+        if(n <= min) return min;
+        return Math.min(n, max);
+    }
+
+    /**
+     * Constrains a value between a min and max value
+     *
+     * @param n   number to constrain
+     * @param min minimum limit
+     * @param max maximum limit
+     * @return The constrained number
+     */
+    public static int constrain(int n, int min, int max) {
+        if(n <= min) return min;
+        return Math.min(n, max);
+    }
+
+    /**
+     * Constrains a value between a min and max value
+     *
+     * @param n   number to constrain
+     * @param min minimum limit
+     * @param max maximum limit
+     * @return The constrained number
+     */
+    public static float constrain(float n, float min, float max) {
+        if(n <= min) return min;
+        return Math.min(n, max);
+    }
+
+    /**
+     * Constrains a value between a min and max value
+     *
+     * @param n   number to constrain
+     * @param min minimum limit
+     * @param max maximum limit
+     * @return The constrained number
+     */
+    public static long constrain(long n, long min, long max) {
+        if(n <= min) return min;
+        return Math.min(n, max);
+    }
 }
