@@ -1,6 +1,9 @@
 package me.landervanlaer.math;
 
 import me.landervanlaer.objects.Drawable;
+import me.landervanlaer.objects.Updatable;
+
+import java.text.MessageFormat;
 
 /**
  * A {@link Drawable} {@link Object} that has a position, velocity and acceleration.
@@ -9,7 +12,7 @@ import me.landervanlaer.objects.Drawable;
  * @author Lander Van laer
  * @version 1.0 2021/01/5
  */
-abstract public class Mover implements Drawable {
+abstract public class Mover implements Drawable, Updatable {
     /**
      * <strong>Position</strong>
      * <p>
@@ -19,6 +22,7 @@ abstract public class Mover implements Drawable {
      * @see #setPos(Coordinate)
      */
     private Coordinate pos;
+
     /**
      * <strong>Velocity</strong>
      * <p>
@@ -34,6 +38,7 @@ abstract public class Mover implements Drawable {
      * @see Vector#getMag()
      */
     private Vector vel;
+
     /**
      * <strong>Acceleration</strong>
      * <p>
@@ -45,6 +50,7 @@ abstract public class Mover implements Drawable {
      * @see #setAcc(Vector)
      */
     private Vector acc;
+
     /**
      * Defines the mass of the {@link Object} itself.
      * <p>
@@ -84,7 +90,7 @@ abstract public class Mover implements Drawable {
     }
 
     /**
-     * The {@link #acc} will be added to the {@link #vel}, while the vel will be added to the current {@link #pos}.
+     * The {@link #acc} will be added to the {@link #vel}, while the @code vel} will be added to the current {@link #pos}.
      * <pre>
      *     add acc to vel
      *     add vel to current pos
@@ -110,24 +116,33 @@ abstract public class Mover implements Drawable {
     }
 
     @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = getPos().hashCode();
+        result = 31 * result + getVel().hashCode();
+        result = 31 * result + getAcc().hashCode();
+        temp = Double.doubleToLongBits(getMass());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if(this == o) return true;
         if(!(o instanceof Mover)) return false;
 
         Mover mover = (Mover) o;
 
-        if(getPos() != null ? !getPos().equals(mover.getPos()) : mover.getPos() != null) return false;
-        if(getVel() != null ? !getVel().equals(mover.getVel()) : mover.getVel() != null) return false;
-        return getAcc() != null ? getAcc().equals(mover.getAcc()) : mover.getAcc() == null;
+        if(Double.compare(mover.getMass(), getMass()) != 0) return false;
+        if(!getPos().equals(mover.getPos())) return false;
+        if(!getVel().equals(mover.getVel())) return false;
+        return getAcc().equals(mover.getAcc());
     }
 
     @Override
     public String toString() {
-        return "Mover{" +
-                "pos=" + pos +
-                ", vel=" + vel +
-                ", acc=" + acc +
-                '}';
+        return MessageFormat.format("Mover'{'pos={0}, vel={1}, acc={2}, mass={3}'}'", pos.toString(), vel.toString(), acc.toString(), mass);
     }
 
     // GETTERS AND SETTERS
