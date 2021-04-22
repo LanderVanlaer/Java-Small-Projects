@@ -4,7 +4,7 @@ package me.landervanlaer.math;
  * A class to describe a two dimensional vector
  *
  * @author Lander Van Laer
- * @version 4.1 2021/01/4
+ * @version 4.2 2021/04/22
  */
 public class Vector implements Cloneable {
     /**
@@ -130,43 +130,6 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * See {@link Object#clone()} for more info
-     *
-     * @return A copy of this {@link Object}
-     * @see Object#clone()
-     * @since 4.1
-     */
-    @Override
-    public Vector clone() {
-        Vector clone = null;
-        try {
-            clone = (Vector) super.clone();
-        } catch(CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        if(clone != null) {
-            clone.setX(getX());
-            clone.setY(getY());
-        }
-        return clone;
-    }
-
-    /**
-     * See {@link Object#toString()}
-     *
-     * @return A representation of the {@link Vector}
-     * @see Object#toString()
-     * @since 1.0
-     */
-    @Override
-    public String toString() {
-        return "Vector{" +
-                "speedX=" + x +
-                ", speedY=" + y +
-                '}';
-    }
-
-    /**
      * Calculate the {@link Angle} of rotation for this vector
      *
      * @return The {@link Angle} the vector is heading to.
@@ -220,6 +183,43 @@ public class Vector implements Cloneable {
         Vector vector = (Vector) o;
         return Double.compare(vector.getX(), getX()) == 0 &&
                 Double.compare(vector.getY(), getY()) == 0;
+    }
+
+    /**
+     * See {@link Object#clone()} for more info
+     *
+     * @return A copy of this {@link Object}
+     * @see Object#clone()
+     * @since 4.1
+     */
+    @Override
+    public Vector clone() {
+        Vector clone = null;
+        try {
+            clone = (Vector) super.clone();
+        } catch(CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        if(clone != null) {
+            clone.setX(getX());
+            clone.setY(getY());
+        }
+        return clone;
+    }
+
+    /**
+     * See {@link Object#toString()}
+     *
+     * @return A representation of the {@link Vector}
+     * @see Object#toString()
+     * @since 1.0
+     */
+    @Override
+    public String toString() {
+        return "Vector{" +
+                "speedX=" + x +
+                ", speedY=" + y +
+                '}';
     }
 
     /**
@@ -315,11 +315,23 @@ public class Vector implements Cloneable {
      * <p>
      * Sets the {@link #x} and {@link #y} component to {@code 0}.
      *
+     * @see #isZero()
      * @since 2.1
      */
     public void zero() {
         setX(0);
         setY(0);
+    }
+
+    /**
+     * Returns whether the vector is a "zero vector" | "null vector".
+     *
+     * @return Whether the {@link #x} and {@link #y} component are 0.
+     * @see #zero()
+     * @since 2.2
+     */
+    public boolean isZero() {
+        return getX() == 0 && getY() == 0;
     }
 
     /**
