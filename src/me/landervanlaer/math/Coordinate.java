@@ -4,7 +4,7 @@ package me.landervanlaer.math;
  * A class representing a Coordinate, by storing the x & y component
  *
  * @author LanderVanLaer
- * @version 1.4 2021/01/2
+ * @version 1.5 2021/05/11
  * @since 1.3
  */
 public class Coordinate {
@@ -35,6 +35,17 @@ public class Coordinate {
     public Coordinate(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * Constucts a {@link Coordinate} with a given Coordinate. Creates a copy of the given Coordinate.
+     *
+     * @param coordinate The Coordinate to copy
+     * @see #Coordinate(double, double)
+     * @since 1.5
+     */
+    public Coordinate(Coordinate coordinate) {
+        this(coordinate.getX(), coordinate.getY());
     }
 
     /**
