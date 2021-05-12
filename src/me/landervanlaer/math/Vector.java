@@ -4,7 +4,7 @@ package me.landervanlaer.math;
  * A class to describe a two dimensional vector
  *
  * @author Lander Van Laer
- * @version 4.2 2021/04/22
+ * @version 4.3 2021/05/12
  */
 public class Vector implements Cloneable {
     /**
@@ -133,10 +133,10 @@ public class Vector implements Cloneable {
      * Calculate the {@link Angle} of rotation for this vector
      *
      * @return The {@link Angle} the vector is heading to.
-     * @since 1.0
+     * @since 4.3
      */
     public Angle getAngle() {
-        return new Angle(Math.acos(this.getX() / this.getMag()));
+        return new Angle(Math.atan2(getY(), getX()));
     }
 
     /**
