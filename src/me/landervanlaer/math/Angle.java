@@ -4,7 +4,7 @@ package me.landervanlaer.math;
  * A class that represents an angle by only storing the radians.
  *
  * @author Lander Van Laer
- * @version 2.0 2021/01/2
+ * @version 2.1 2021/06/19
  */
 public class Angle {
     /**
@@ -76,11 +76,8 @@ public class Angle {
     static public double simplifyRadians(double radians) {
         final double DOUBLE_PI = Math.PI * 2D;
 
-        while(radians < 0 || radians >= DOUBLE_PI) {
-            if(radians < 0) radians += DOUBLE_PI;
-            else radians -= DOUBLE_PI;
-        }
-        return radians;
+        radians %= DOUBLE_PI;
+        return radians < 0 ? radians + DOUBLE_PI : radians;
     }
 
     /**
@@ -93,11 +90,8 @@ public class Angle {
      * @see #simplifyRadians(double)
      */
     static public double simplifyDegrees(double degrees) {
-        while(degrees < 0 || degrees >= 360D) {
-            if(degrees < 0) degrees += 360D;
-            else degrees -= 360D;
-        }
-        return degrees;
+        degrees %= 360D;
+        return degrees < 0 ? degrees + 360D : degrees;
     }
 
     /**
